@@ -53,7 +53,7 @@ function Tools() {
           bottom: 0,
           background: 'linear-gradient(135deg, #1a0033 0%, #330066 100%)',
           zIndex: 0,
-          filter: 'blur(100px) brightness(0.7)',
+          filter: 'blur(60px) brightness(0.7)',
           transform: 'scale(1.2)'
         }}
       />
@@ -259,7 +259,7 @@ function Tools() {
                   display: 'flex',
                   flexDirection: 'column',
                   background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(20px)',
+                  backdropFilter: 'blur(15px)',
                   borderRadius: '16px',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   transition: 'all 0.3s ease-in-out',
@@ -327,7 +327,7 @@ function Tools() {
           mt: 'auto',
           borderTop: '1px solid rgba(255,255,255,0.1)',
           background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(20px)',
+          backdropFilter: 'blur(15px)',
           fontSize: { xs: '0.75rem', sm: '0.875rem' }
         }}
       >

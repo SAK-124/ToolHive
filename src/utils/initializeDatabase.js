@@ -19,13 +19,19 @@ const initializeDatabase = async () => {
         email: auth.currentUser.email,
         createdAt: new Date().toISOString()
       });
-      console.log('Users node initialized with admin user');
+      if (import.meta.env.DEV) {
+        console.log('Users node initialized with admin user')
+      }
     }
 
     // Initialize tools using databaseService
-    console.log('Initializing tools from toolData...');
+    if (import.meta.env.DEV) {
+      console.log('Initializing tools from toolData...')
+    }
     await databaseService.initializeDefaultTools(toolCards);
-    console.log('Tools initialized successfully');
+    if (import.meta.env.DEV) {
+      console.log('Tools initialized successfully')
+    }
 
     return true;
   } catch (error) {
@@ -44,11 +50,15 @@ export const setupDatabase = async () => {
     // Clear existing tools before initialization to prevent duplicates
     const db = getDatabase();
     const toolsRef = ref(db, 'tools');
-    await set(toolsRef, null);
-    console.log('Cleared existing tools');
+    await set(toolsRef, null)
+    if (import.meta.env.DEV) {
+      console.log('Cleared existing tools')
+    }
     
-    await initializeDatabase();
-    console.log('Database initialization complete');
+    await initializeDatabase()
+    if (import.meta.env.DEV) {
+      console.log('Database initialization complete')
+    }
   } catch (error) {
     console.error('Database setup failed:', error);
     throw error;
@@ -63,8 +73,10 @@ export const addAdminUser = async (uid, email) => {
       isAdmin: true,
       email: email,
       createdAt: new Date().toISOString()
-    });
-    console.log('Admin user added successfully');
+    })
+    if (import.meta.env.DEV) {
+      console.log('Admin user added successfully')
+    }
   } catch (error) {
     console.error('Error adding admin user:', error);
     throw error;

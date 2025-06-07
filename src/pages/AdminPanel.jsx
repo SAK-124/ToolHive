@@ -188,7 +188,9 @@ const AdminPanel = () => {
       const urlObj = new URL(urlToUse);
       return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
     } catch (error) {
-      console.log('Error generating logo URL:', error);
+      if (import.meta.env.DEV) {
+        console.log('Error generating logo URL:', error)
+      }
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(editingTool?.title || 'New Tool')}&background=random`;
     }
   };
@@ -244,7 +246,9 @@ const AdminPanel = () => {
 
       // Save to Firebase
       const savedTool = await databaseService.saveTool(toolToSave);
-      console.log('Tool saved successfully:', savedTool);
+      if (import.meta.env.DEV) {
+        console.log('Tool saved successfully:', savedTool)
+      }
       
       // Close dialog and show success message
       setOpenDialog(false);
@@ -304,7 +308,7 @@ const AdminPanel = () => {
           bottom: 0,
           background: 'linear-gradient(135deg, #1a0033 0%, #330066 100%)',
           zIndex: 0,
-          filter: 'blur(100px) brightness(0.7)',
+          filter: 'blur(60px) brightness(0.7)',
           transform: 'scale(1.2)'
         }}
       />
@@ -393,7 +397,7 @@ const AdminPanel = () => {
                 sx={{
                   height: '100%',
                   background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(20px)',
+                  backdropFilter: 'blur(15px)',
                   borderRadius: '16px',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   transition: 'all 0.3s ease-in-out',
@@ -471,7 +475,7 @@ const AdminPanel = () => {
         PaperProps={{
           sx: {
             background: 'rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(20px)',
+            backdropFilter: 'blur(15px)',
             borderRadius: '16px',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',

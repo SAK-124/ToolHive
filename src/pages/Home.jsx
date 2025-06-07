@@ -53,15 +53,17 @@ function Home() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Log whenever filtered tools change
+  // Monitor filtered tools change (no logging in production)
   useEffect(() => {
-    console.log('Filtered tools updated:', {
-      totalTools: tools.length,
-      filteredCount: filteredTools.length,
-      isAdminUser,
-      adminOnlyShown: filteredTools.filter(t => t.adminOnly === true).length
-    });
-  }, [filteredTools, tools, isAdminUser]);
+    if (import.meta.env.DEV) {
+      console.log('Filtered tools updated:', {
+        totalTools: tools.length,
+        filteredCount: filteredTools.length,
+        isAdminUser,
+        adminOnlyShown: filteredTools.filter(t => t.adminOnly === true).length
+      })
+    }
+  }, [filteredTools, tools, isAdminUser])
 
   // Check auth and admin status
   useEffect(() => {
@@ -73,10 +75,14 @@ function Home() {
         
         // Check admin status
         const adminStatus = await isAdmin(user.uid);
-        console.log('Admin status check:', { email: user.email, adminStatus });
+        if (import.meta.env.DEV) {
+          console.log('Admin status check:', { email: user.email, adminStatus })
+        }
         setIsAdminUser(adminStatus);
       } else {
-        console.log('User logged out');
+        if (import.meta.env.DEV) {
+          console.log('User logged out')
+        }
         setUserEmail(null);
         setUserId(null);
         setIsAdminUser(false);
@@ -93,11 +99,13 @@ function Home() {
         setLoading(true);
         // Always sync with default tools to ensure updates are reflected
         const syncedTools = await databaseService.syncWithDefaultTools(toolCards);
-        console.log('Loaded tools:', {
-          count: syncedTools.length,
-          adminOnlyCount: syncedTools.filter(t => t.adminOnly === true).length,
-          adminOnlyTools: syncedTools.filter(t => t.adminOnly === true).map(t => t.title)
-        });
+        if (import.meta.env.DEV) {
+          console.log('Loaded tools:', {
+            count: syncedTools.length,
+            adminOnlyCount: syncedTools.filter(t => t.adminOnly === true).length,
+            adminOnlyTools: syncedTools.filter(t => t.adminOnly === true).map(t => t.title)
+          })
+        }
         setTools(syncedTools);
       } catch (error) {
         console.error('Error loading tools:', error);
@@ -150,7 +158,7 @@ function Home() {
           backgroundSize: '400% 400%',
           animation: 'gradientBG 30s ease infinite',
           zIndex: 0,
-          filter: 'blur(100px) brightness(0.7)',
+          filter: 'blur(60px) brightness(0.7)',
           transform: 'scale(1.2)', // Prevent blur edges from showing
           '@keyframes gradientBG': {
             '0%': {
