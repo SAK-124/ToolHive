@@ -48,8 +48,8 @@ const glassEffectStyles = (isSelected) => ({
   background: isSelected 
     ? 'linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.12))'
     : 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08))',
-  backdropFilter: 'blur(20px) saturate(180%)',
-  WebkitBackdropFilter: 'blur(30px) saturate(190%)',
+  backdropFilter: 'blur(15px) saturate(180%)',
+  WebkitBackdropFilter: 'blur(25px) saturate(190%)',
   borderRadius: 'inherit',
   border: `1px solid ${isSelected ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.15)'}`,
   transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -90,6 +90,7 @@ export const ToolCard = React.memo(({ tool, isSelected }) => {
       whileHover="hover"
       whileTap="tap"
       sx={{
+        willChange: 'transform',
         height: '100%',
         backgroundColor: 'rgba(255,255,255,0.03)',
         borderRadius: isMobile ? '16px' : '24px',
@@ -163,7 +164,8 @@ export const ToolCard = React.memo(({ tool, isSelected }) => {
             objectFit: 'contain',
             p: isMobile ? 1.5 : 3,
             transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))',
+            willChange: 'transform'
           }}
         />
 

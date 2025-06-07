@@ -46,10 +46,12 @@ function App() {
         await setPersistence(auth, browserLocalPersistence);
         
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          console.log('Auth state changed:', currentUser?.email);
-          setUser(currentUser);
-          setLoading(false);
-        });
+          if (import.meta.env.DEV) {
+            console.log('Auth state changed:', currentUser?.email)
+          }
+          setUser(currentUser)
+          setLoading(false)
+        })
 
         return () => unsubscribe();
       } catch (error) {

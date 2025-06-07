@@ -46,8 +46,10 @@ export const databaseService = {
       };
 
       // Save directly to the tools node with the toolId as the key
-      await set(ref(database, `tools/${toolId}`), toolToSave);
-      console.log('Tool saved to Firebase:', toolToSave);
+      await set(ref(database, `tools/${toolId}`), toolToSave)
+      if (import.meta.env.DEV) {
+        console.log('Tool saved to Firebase:', toolToSave)
+      }
       
       return toolToSave;
     } catch (error) {
@@ -99,8 +101,10 @@ export const databaseService = {
       
       // If we can't write to the database, return the default tools
       if (!existingTools) {
-        console.log('No existing tools found, using default tools');
-        return defaultTools;
+        if (import.meta.env.DEV) {
+          console.log('No existing tools found, using default tools')
+        }
+        return defaultTools
       }
 
       // Create maps for both default and existing tools
@@ -141,15 +145,21 @@ export const databaseService = {
           return acc;
         }, {});
         
-        await set(toolsRef, toolsObject);
-        console.log('Successfully synchronized tools with database');
+        await set(toolsRef, toolsObject)
+        if (import.meta.env.DEV) {
+          console.log('Successfully synchronized tools with database')
+        }
       } catch (error) {
-        console.log('Unable to update database, using merged tools anyway:', error);
+        if (import.meta.env.DEV) {
+          console.log('Unable to update database, using merged tools anyway:', error)
+        }
       }
 
       return mergedTools;
     } catch (error) {
-      console.log('Error synchronizing tools:', error);
+      if (import.meta.env.DEV) {
+        console.log('Error synchronizing tools:', error)
+      }
       // Return default tools as fallback
       return defaultTools;
     }
@@ -162,7 +172,9 @@ export const databaseService = {
       const snapshot = await get(toolsRef);
       
       if (!snapshot.exists()) {
-        console.log('No tools found in database, initializing with defaults');
+        if (import.meta.env.DEV) {
+          console.log('No tools found in database, initializing with defaults')
+        }
         const toolsObject = defaultTools.reduce((acc, tool) => {
           const safeId = createSafeId(tool.url || tool.title);
           acc[safeId] = {
@@ -174,8 +186,10 @@ export const databaseService = {
           return acc;
         }, {});
         
-        await set(toolsRef, toolsObject);
-        console.log('Successfully initialized database with default tools');
+        await set(toolsRef, toolsObject)
+        if (import.meta.env.DEV) {
+          console.log('Successfully initialized database with default tools')
+        }
         return Object.values(toolsObject);
       }
       

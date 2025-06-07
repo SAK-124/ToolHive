@@ -88,7 +88,7 @@ function Login() {
           bottom: 0,
           background: 'linear-gradient(135deg, #1a0033 0%, #330066 100%)',
           zIndex: 0,
-          filter: 'blur(100px) brightness(0.7)',
+          filter: 'blur(60px) brightness(0.7)',
           transform: 'scale(1.2)'
         }}
       />
@@ -141,7 +141,7 @@ function Login() {
           sx={{
             width: '100%',
             background: 'rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(20px)',
+            backdropFilter: 'blur(15px)',
             borderRadius: '24px',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
             padding: '32px',
