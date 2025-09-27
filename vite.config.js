@@ -1,6 +1,5 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import viteImagemin from 'vite-plugin-imagemin'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -14,49 +13,6 @@ export default defineConfig(({ command, mode }) => {
           plugins: ['@emotion/babel-plugin'],
           compact: true
         }
-      }),
-      viteImagemin({
-        gifsicle: {
-          optimizationLevel: 7,
-          interlaced: false,
-        },
-        optipng: {
-          optimizationLevel: 7,
-        },
-        mozjpeg: {
-          quality: 60,
-        },
-        pngquant: {
-          quality: [0.7, 0.8],
-          speed: 4,
-        },
-        webp: {
-          quality: 70,
-        },
-        svgo: {
-          multipass: true,
-          plugins: [
-            {
-              name: 'removeViewBox',
-            },
-            {
-              name: 'minifyStyles',
-            },
-            {
-              name: 'removeMetadata',
-            },
-            {
-              name: 'removeUselessStrokeAndFill',
-            },
-            {
-              name: 'reusePaths',
-            },
-            {
-              name: 'removeEmptyAttrs',
-              active: true,
-            },
-          ],
-        },
       }),
     ],
     build: {
