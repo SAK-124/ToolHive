@@ -20,10 +20,66 @@ setPersistence(auth, browserLocalPersistence)
 console.log('App Version:', import.meta.env.VITE_APP_VERSION || '1.0.0');
 console.log('Environment:', import.meta.env.MODE);
 
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: 'linear-gradient(135deg, #1a0033 0%, #302b63 50%, #24243e 100%)',
+          color: 'white',
+          fontFamily: 'Arial, sans-serif',
+          padding: '20px',
+          textAlign: 'center'
+        }}>
+          <h1>Something went wrong</h1>
+          <p>Please refresh the page or try again later.</p>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '10px 20px',
+              background: 'rgba(255,255,255,0.2)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              borderRadius: '5px',
+              color: 'white',
+              cursor: 'pointer',
+              marginTop: '20px'
+            }}
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App key={import.meta.env.VITE_APP_VERSION || '1.0.0'} />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <App key={import.meta.env.VITE_APP_VERSION || '1.0.0'} />
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 )

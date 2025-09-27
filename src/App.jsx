@@ -49,15 +49,18 @@ const AdminRoute = ({ children }) => {
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const auth = getAuth();
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        console.log('Initializing authentication...');
         await setPersistence(auth, browserLocalPersistence);
+        console.log('Persistence set successfully');
         
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          console.log('Auth state changed:', currentUser?.email);
+          console.log('Auth state changed:', currentUser?.email || 'No user');
           setUser(currentUser);
           setLoading(false);
         });
@@ -66,7 +69,7 @@ function App() {
         const timeout = setTimeout(() => {
           console.log('Auth timeout - setting loading to false');
           setLoading(false);
-        }, 5000);
+        }, 3000); // Reduced timeout for production
 
         return () => {
           clearTimeout(timeout);
@@ -74,6 +77,7 @@ function App() {
         };
       } catch (error) {
         console.error("Error setting persistence:", error);
+        setError(error);
         setLoading(false);
       }
     };
@@ -104,12 +108,63 @@ function App() {
         }}></div>
         <h2 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>ToolHive</h2>
         <p style={{ margin: '0', opacity: 0.8 }}>Loading your AI tools...</p>
+        <button 
+          onClick={() => setLoading(false)}
+          style={{
+            marginTop: '20px',
+            padding: '10px 20px',
+            background: 'rgba(255,255,255,0.2)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '5px',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Skip Loading
+        </button>
         <style>{`
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
           }
         `}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        background: 'linear-gradient(135deg, #1a0033 0%, #302b63 50%, #24243e 100%)',
+        color: 'white',
+        fontFamily: 'Arial, sans-serif',
+        padding: '20px',
+        textAlign: 'center'
+      }}>
+        <h2>Authentication Error</h2>
+        <p>There was an issue with authentication. You can still access the tools.</p>
+        <button 
+          onClick={() => {
+            setError(null);
+            setLoading(false);
+          }}
+          style={{
+            padding: '10px 20px',
+            background: 'rgba(255,255,255,0.2)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '5px',
+            color: 'white',
+            cursor: 'pointer',
+            marginTop: '20px'
+          }}
+        >
+          Continue Anyway
+        </button>
       </div>
     );
   }
