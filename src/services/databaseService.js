@@ -27,7 +27,8 @@ export const databaseService = {
       return [];
     } catch (error) {
       console.error('Error getting tools:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent app crashes
+      return [];
     }
   },
 
@@ -95,7 +96,13 @@ export const databaseService = {
   // Synchronize database with default tools and preserve custom tools
   syncWithDefaultTools: async (defaultTools) => {
     try {
-      const existingTools = await databaseService.getAllTools();
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Database timeout')), 8000)
+      );
+      
+      const existingToolsPromise = databaseService.getAllTools();
+      const existingTools = await Promise.race([existingToolsPromise, timeoutPromise]);
       
       // If we can't write to the database, return the default tools
       if (!existingTools) {

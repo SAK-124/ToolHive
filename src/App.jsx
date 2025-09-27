@@ -29,7 +29,18 @@ const AdminRoute = ({ children }) => {
   }, [auth]);
 
   if (loading) {
-    return null; // or a loading spinner
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        background: 'linear-gradient(135deg, #1a0033 0%, #302b63 50%, #24243e 100%)',
+        color: 'white'
+      }}>
+        <div>Checking admin access...</div>
+      </div>
+    );
   }
 
   return isAdminUser ? children : <Navigate to="/" replace />;
@@ -51,7 +62,16 @@ function App() {
           setLoading(false);
         });
 
-        return () => unsubscribe();
+        // Set a timeout to prevent infinite loading
+        const timeout = setTimeout(() => {
+          console.log('Auth timeout - setting loading to false');
+          setLoading(false);
+        }, 5000);
+
+        return () => {
+          clearTimeout(timeout);
+          unsubscribe();
+        };
       } catch (error) {
         console.error("Error setting persistence:", error);
         setLoading(false);
@@ -66,12 +86,30 @@ function App() {
       <div style={{ 
         height: '100vh', 
         display: 'flex', 
+        flexDirection: 'column',
         justifyContent: 'center', 
         alignItems: 'center',
         background: 'linear-gradient(135deg, #1a0033 0%, #302b63 50%, #24243e 100%)',
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Arial, sans-serif'
       }}>
-        Loading...
+        <div style={{
+          width: '50px',
+          height: '50px',
+          border: '3px solid rgba(255,255,255,0.3)',
+          borderTop: '3px solid white',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          marginBottom: '20px'
+        }}></div>
+        <h2 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>ToolHive</h2>
+        <p style={{ margin: '0', opacity: 0.8 }}>Loading your AI tools...</p>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }

@@ -108,7 +108,16 @@ function Home() {
       }
     };
 
-    loadTools();
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      console.log('Tools loading timeout - using fallback');
+      setTools(toolCards);
+      setLoading(false);
+    }, 10000);
+
+    loadTools().finally(() => {
+      clearTimeout(timeout);
+    });
   }, []);
 
   if (loading) {
